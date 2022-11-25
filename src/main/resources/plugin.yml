@@ -5,3 +5,7 @@ api-version: 1.19
 
 authors: [l4zs, Coole Pizza, StckOverflw, DQMME]
 website: https://github.com/KtFTW
+
+commands:
+    start:
+        permission: ktftw.start
