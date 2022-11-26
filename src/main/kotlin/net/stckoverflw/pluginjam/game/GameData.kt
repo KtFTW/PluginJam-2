@@ -1,12 +1,13 @@
-package net.stckoverflw.pluginjam.data
+package net.stckoverflw.pluginjam.game
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.task
-import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
+import net.kyori.adventure.text.Component
 import net.stckoverflw.pluginjam.timer.Timer
 import net.stckoverflw.pluginjam.util.Constants
+import net.stckoverflw.pluginjam.util.broadcastPointChangeMessage
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.EntityType
@@ -57,7 +58,8 @@ object GameData {
         if (list == null) list = arrayListOf()
         list.add(player.uniqueId)
         uniqueMaterials[material] = list
-        addPoints(player, points)
+        player.points += points
+        player.broadcastPointChangeMessage(points, Component.text("Item"), Component.translatable(material.translationKey()))
     }
 
     fun handleAnimalKill(player: Player, entityType: EntityType) {
@@ -67,7 +69,8 @@ object GameData {
         if (list == null) list = arrayListOf()
         list.add(player.uniqueId)
         uniqueAnimals[entityType] = list
-        addPoints(player, points)
+        player.points += points
+        player.broadcastPointChangeMessage(points, Component.text("Entity"), Component.translatable(entityType.translationKey()))
     }
 
     fun handleAdvancement(player: Player, advancement: NamespacedKey) {
@@ -78,13 +81,8 @@ object GameData {
         if (list == null) list = arrayListOf()
         list.add(player.uniqueId)
         uniqueAdvancements[advancement] = list
-        addPoints(player, points)
-    }
-
-    private fun addPoints(player: Player, points: Int) {
-        player.points = playerPoints[player.uniqueId] ?: 0 + 2
-        player.sendMessage("Du hast $points Punkte erhalten.")
-        GameScoreboard.setScore(player, points)
+        player.points += points
+        player.broadcastPointChangeMessage(points, Component.text("Entity"), Component.translatable(advancement.key))
     }
 
     private fun getRewardPoints(step: Int, basePoints: Int, stepPoints: Int): Int {

@@ -1,7 +1,8 @@
 package net.stckoverflw.pluginjam.util
 
-object Constants {
+import net.kyori.adventure.text.Component
 
+object Constants {
 
     const val WORLDBORDER_SIZE = 500.0
 

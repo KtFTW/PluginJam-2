@@ -3,7 +3,7 @@ package net.stckoverflw.pluginjam
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.main.KSpigot
 import net.stckoverflw.pluginjam.command.StartCommand
-import net.stckoverflw.pluginjam.data.handleDeath
+import net.stckoverflw.pluginjam.game.handleDeath
 import net.stckoverflw.pluginjam.listeners.LobbyListeners
 import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
 import org.bukkit.Bukkit
