@@ -1,6 +1,10 @@
 package net.stckoverflw.pluginjam.util
 
+import net.axay.kspigot.extensions.pluginKey
+
 object Constants {
+
+    val ARMOR_KEY = pluginKey("armor")
 
     const val WORLDBORDER_SIZE = 500.0
 

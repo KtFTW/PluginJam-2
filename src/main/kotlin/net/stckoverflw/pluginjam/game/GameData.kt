@@ -14,6 +14,8 @@ import net.stckoverflw.pluginjam.util.Constants
 import net.stckoverflw.pluginjam.util.broadcastPointChangeMessage
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.Sound
+import org.bukkit.advancement.Advancement
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -98,7 +100,12 @@ object GameData {
         list.add(player.uniqueId)
         uniqueMaterials[material] = list
         player.points += points
-        player.broadcastPointChangeMessage(points, Component.text("Item"), Component.translatable(material.translationKey()))
+        player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+        player.broadcastPointChangeMessage(
+            points,
+            Component.text("Item"),
+            Component.translatable(material.translationKey())
+        )
     }
 
     fun handleAnimalKill(player: Player, entityType: EntityType) {
@@ -110,7 +117,12 @@ object GameData {
         list.add(player.uniqueId)
         uniqueAnimals[entityType] = list
         player.points += points
-        player.broadcastPointChangeMessage(points, Component.text("Entity"), Component.translatable(entityType.translationKey()))
+        player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+        player.broadcastPointChangeMessage(
+            points,
+            Component.text("Entity"),
+            Component.translatable(entityType.translationKey())
+        )
     }
 
     fun handleAdvancement(player: Player, advancement: Advancement) {

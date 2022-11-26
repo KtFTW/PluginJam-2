@@ -2,6 +2,10 @@ package net.stckoverflw.pluginjam
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.main.KSpigot
+import net.axay.kspigot.runnables.sync
+import net.axay.kspigot.runnables.task
+import net.stckoverflw.pluginjam.command.ResetCommand
+import net.stckoverflw.pluginjam.command.ShopCommand
 import net.stckoverflw.pluginjam.command.StartCommand
 import net.stckoverflw.pluginjam.game.handleDeath
 import net.stckoverflw.pluginjam.listeners.LobbyListeners
@@ -23,5 +27,4 @@ class PluginJamTwoPlugin : KSpigot() {
             Bukkit.getWorld("world") !!.worldBorder.size = 30.0
         }
     }
-
 }

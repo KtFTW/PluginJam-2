@@ -1,5 +1,6 @@
 package net.stckoverflw.pluginjam.util
 
+import net.axay.kspigot.chat.literalText
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
