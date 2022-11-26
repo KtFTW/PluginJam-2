@@ -1,7 +1,5 @@
 package net.stckoverflw.pluginjam.util
 
-import net.kyori.adventure.text.Component
-
 object Constants {
 
     const val WORLDBORDER_SIZE = 500.0
@@ -10,13 +8,13 @@ object Constants {
     const val MILESTONE_BROADCAST_PERCENTAGE = 0.1
 
     const val POINTS_PER_MATERIAL = 5
-    const val POINTS_PER_ANIMAL = 25
-    const val POINTS_PER_ADVANCEMENT = 10
-    const val POINTS_PER_TASK = 75
+    const val POINTS_PER_ANIMAL = 20
+    const val POINTS_PER_ADVANCEMENT = 15
+    const val POINTS_PER_TASK = 125
 
     const val MATERIAL_POINTS_STEP = 1
     const val ANIMAL_POINTS_STEP = 5
-    const val ADVANCEMENT_POINTS_STEP = 1
+    const val ADVANCEMENT_POINTS_STEP = 5
     const val TASK_POINTS_STEP = 25
 
 

@@ -12,14 +12,15 @@ import org.bukkit.event.entity.PlayerDeathEvent
 class PluginJamTwoPlugin : KSpigot() {
 
     override fun startup() {
-        GameScoreboard.create()
+        Timer.invoke()
+        ResetCommand()
+        ShopCommand()
+        StartCommand()
         LobbyListeners.register()
-        Bukkit.getPluginCommand("start")?.setExecutor(StartCommand())
 
-        Bukkit.getWorld("world")!!.worldBorder.size = 25.0
-
-        listen<PlayerDeathEvent> {
-            it.entity.handleDeath()
+        task(sync = true, delay = 1) {
+            GameScoreboard.create()
+            Bukkit.getWorld("world") !!.worldBorder.size = 30.0
         }
     }
 

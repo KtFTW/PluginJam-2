@@ -26,6 +26,14 @@ object Timer {
             if (running) {
                 time++
             }
+
+            if(time >= 600) {
+                task(sync = true) {
+                    GameData.handleWin()
+                }
+                broadcastTimer(mini("<red><bold>Das Spiel ist beendet."))
+                return@task
+            }
             broadcastTimer(formatTime())
         }
     }
