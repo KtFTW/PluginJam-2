@@ -7,13 +7,24 @@ import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.command.ResetCommand
 import net.stckoverflw.pluginjam.command.ShopCommand
 import net.stckoverflw.pluginjam.command.StartCommand
+import net.stckoverflw.pluginjam.config.Config
 import net.stckoverflw.pluginjam.game.handleDeath
 import net.stckoverflw.pluginjam.listeners.LobbyListeners
 import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
+import net.stckoverflw.pluginjam.timer.Timer
+import net.stckoverflw.pluginjam.util.WorldUtil
 import org.bukkit.Bukkit
 import org.bukkit.event.entity.PlayerDeathEvent
 
 class PluginJamTwoPlugin : KSpigot() {
+
+    override fun load() {
+        saveDefaultConfig()
+
+        if (Config.reset) {
+            WorldUtil.resetWorlds()
+        }
+    }
 
     override fun startup() {
         Timer.invoke()

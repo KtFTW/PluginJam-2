@@ -11,7 +11,11 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
 import net.stckoverflw.pluginjam.timer.Timer
 import net.stckoverflw.pluginjam.util.Constants
+import net.stckoverflw.pluginjam.util.WorldUtil
 import net.stckoverflw.pluginjam.util.broadcastPointChangeMessage
+import net.stckoverflw.pluginjam.util.mini
+import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
@@ -97,8 +101,10 @@ object GameData {
 
         val points = getRewardPoints(list?.size ?: 0, Constants.POINTS_PER_MATERIAL, Constants.MATERIAL_POINTS_STEP)
         if (list == null) list = arrayListOf()
+
         list.add(player.uniqueId)
         uniqueMaterials[material] = list
+
         player.points += points
         player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
         player.broadcastPointChangeMessage(
@@ -114,8 +120,10 @@ object GameData {
 
         val points = getRewardPoints(list?.size ?: 0, Constants.POINTS_PER_ANIMAL, Constants.ANIMAL_POINTS_STEP)
         if (list == null) list = arrayListOf()
+
         list.add(player.uniqueId)
         uniqueAnimals[entityType] = list
+
         player.points += points
         player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
         player.broadcastPointChangeMessage(
@@ -132,16 +140,52 @@ object GameData {
         val points =
             getRewardPoints(list?.size ?: 0, Constants.POINTS_PER_ADVANCEMENT, Constants.ADVANCEMENT_POINTS_STEP)
         if (list == null) list = arrayListOf()
+
         list.add(player.uniqueId)
-        uniqueAdvancements[advancement] = list
+        uniqueAdvancements[advancement.key] = list
+
         player.points += points
         player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
         player.broadcastPointChangeMessage(points, Component.text("Advancement"), advancement.display?.title())
+    }
+
+    fun handleWin() {
+        if(!Timer.isRunning()) return
+
+        Timer.stop()
+        val winner = playerPoints.entries.maxByOrNull { it.value }
+        val winningPlayer = if (winner != null) Bukkit.getPlayer(winner.key) else null
+
+        if (winningPlayer != null) {
+            onlinePlayers.forEach {
+                it.title(
+                    winningPlayer.name().color(NamedTextColor.GREEN),
+                    Component.text("hat das Spiel gewonnen!", NamedTextColor.GREEN), Duration.ofMillis(250),
+                    Duration.ofSeconds(5), Duration.ofMillis(250)
+                )
+            }
+            Bukkit.broadcast(mini("<green>${winningPlayer.name} hat das Spiel mit <red>${winner!!.value} <green>Punkten gewonnen"))
+        }
+        Bukkit.broadcast(mini("<green>Das Spiel wurde beendet."))
+
+        onlinePlayers.forEach {
+            it.teleport(worlds[0].spawnLocation)
+        }
+
+        task(
+            true,
+            0,
+            15,
+            10
+        ) {
+            worlds[0].spawnEntity(worlds[0].spawnLocation, EntityType.FIREWORK)
+        }
+
+        WorldUtil.initializeReset()
     }
 
     private fun getRewardPoints(step: Int, basePoints: Int, stepPoints: Int): Int {
         val points = basePoints - (step * stepPoints)
         return if (points <= 0) 1 else points
     }
-
 }
