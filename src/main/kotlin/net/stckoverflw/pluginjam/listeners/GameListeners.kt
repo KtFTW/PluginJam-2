@@ -19,12 +19,14 @@ import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
+import org.bukkit.event.player.PlayerExpChangeEvent
+import org.bukkit.event.player.PlayerLevelChangeEvent
 import kotlin.random.Random
 
 object GameListeners {
     fun register() {
         listen<PlayerDeathEvent> {
-            it.drops.clear()
+            it.keepInventory = true
             it.itemsToKeep.minusAssign(
                 it.itemsToKeep
                     .filter { item -> ! MaterialTags.ARMOR.isTagged(item.type) }
@@ -38,8 +40,12 @@ object GameListeners {
             if (! Timer.isRunning()) return@listen
             if (it.entityType != EntityType.PLAYER) return@listen
             if (MaterialTags.ARMOR.isTagged(it.item.itemStack.type)) {
-                if (it.item.itemStack.itemMeta.persistentDataContainer.has(Constants.ARMOR_KEY))
+                if (it.item.itemStack.itemMeta.persistentDataContainer.has(Constants.ARMOR_KEY)) {
                     return@listen
+                } else {
+                    it.isCancelled = true
+                    return@listen
+                }
             }
 
             GameData.handleMaterialPickup(it.entity as Player, it.item.itemStack.type)
@@ -67,12 +73,21 @@ object GameListeners {
             if (! Timer.isRunning()) return@listen
             if (it.isCancelled) return@listen
             if (it.currentItem?.let { it1 -> MaterialTags.ARMOR.isTagged(it1.type) } == true) {
-                if (it.currentItem?.itemMeta?.persistentDataContainer?.has(Constants.ARMOR_KEY) == true)
+                if (it.currentItem?.itemMeta?.persistentDataContainer?.has(Constants.ARMOR_KEY) == true) {
                     return@listen
+                } else {
+                    it.isCancelled = true
+                    return@listen
+                }
             }
             if (it.whoClicked !is Player || it.currentItem == null) return@listen
             if (it.currentItem !!.type == Material.AIR) return@listen
             GameData.handleMaterialPickup(it.whoClicked as Player, it.currentItem !!.type)
+        }
+
+        listen<PlayerLevelChangeEvent> {
+            if (! Timer.isRunning()) return@listen
+            GameData.handleLevelChange(it.player)
         }
 
         listen<EntityDamageEvent> {

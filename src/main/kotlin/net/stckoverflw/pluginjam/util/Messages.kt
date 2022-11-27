@@ -8,6 +8,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.core.HolderSet.Named
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import kotlin.math.absoluteValue
 
 fun mini(string: String) = MiniMessage.miniMessage().deserialize(string)
 fun text(string: String) = Component.text(string)
@@ -16,7 +17,7 @@ fun text(string: String, color: TextColor) = Component.text(string, color)
 //[TYPE] PLAYER gewann/verlor i (durch )
 fun Player.broadcastPointChangeMessage(points: Int, type: Component, element: Component?) {
     val pointsComponent = if (points >= 0) Component.text("gewann $points Punkte", NamedTextColor.GREEN)
-    else Component.text("verlor $points", NamedTextColor.RED)
+    else Component.text("verlor ${points.absoluteValue} Punkte", NamedTextColor.RED)
 
     val component = literalText {
         text("[") {

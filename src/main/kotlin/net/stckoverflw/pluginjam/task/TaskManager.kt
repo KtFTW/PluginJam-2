@@ -12,6 +12,7 @@ import kotlin.random.nextInt
 
 object TaskManager {
     private val tasks = mutableListOf<Task>()
+
     operator fun invoke() {
         tasks.add(ReachHeightTask(Random.nextInt(140..250)))
         tasks.add(FindItemTask(FindItemTask.ITEMS.random()))
@@ -23,4 +24,3 @@ object TaskManager {
             tasks.map { it.makeComponent(player) }.toSet())
     }
 }
-

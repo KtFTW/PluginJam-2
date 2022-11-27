@@ -1,6 +1,7 @@
 package net.stckoverflw.pluginjam.game
 
 import com.mojang.datafixers.kinds.Const
+import net.axay.kspigot.chat.literalText
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.title
 import net.axay.kspigot.extensions.onlinePlayers
@@ -27,10 +28,12 @@ import org.bukkit.potion.PotionEffectType
 import java.time.Duration
 import java.util.UUID
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 
 val gamePlayers: List<Player>
-    get() = onlinePlayers.filter { it.gameMode != GameMode.SURVIVAL }
+    get() = onlinePlayers.filter { it.gameMode == GameMode.SURVIVAL }
+
 var Player.points: Int
     get() = playerPoints[uniqueId] ?: 0
     set(value) {
@@ -41,15 +44,13 @@ var Player.points: Int
             GameData.handleWin()
         } else {
             val milestone = Constants.MAX_POINTS * Constants.MILESTONE_BROADCAST_PERCENTAGE
-            if (points % milestone > value % milestone) {
+            if (value % milestone > points % milestone) {
                 broadcast("$name ist bei [${location.blockX}, ${location.blockY}, ${location.blockZ}]")
             }
             removePotionEffect(PotionEffectType.GLOWING)
             removePotionEffect(PotionEffectType.SLOW_DIGGING)
             if (value >= Constants.MAX_POINTS * 0.25) {
                 addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 99999, 1))
-            }
-            if (value >= Constants.MAX_POINTS * 0.25) {
                 addPotionEffect(
                     PotionEffect(
                         PotionEffectType.SLOW_DIGGING,
@@ -57,6 +58,17 @@ var Player.points: Int
                         (value / Constants.MAX_POINTS / 0.1).roundToInt()
                     )
                 )
+            }
+            if (value >= Constants.MAX_POINTS * 0.5) {
+                if (Random.nextInt(5) == 1) {
+                    addPotionEffect(
+                        PotionEffect(
+                            PotionEffectType.LEVITATION,
+                            (value / Constants.MAX_POINTS / 0.2).roundToInt(),
+                            1
+                        )
+                    )
+                }
             }
         }
     }
@@ -97,6 +109,22 @@ fun Player.ping() = playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
 
 object GameData {
 
+    fun handleLevelChange(player: Player) {
+        var list = uniqueLevels[player.level]
+        if (list?.contains(player.uniqueId) == true) return
+        if (list == null) list = arrayListOf()
+        list.add(player.uniqueId)
+        uniqueLevels[player.level] = list
+
+        player.points += player.level
+        player.ping()
+        player.broadcastPointChangeMessage(
+            player.level,
+            Component.text("XP"),
+            null
+        )
+    }
+
     fun handleMaterialPickup(player: Player, material: Material) {
         var list = uniqueMaterials[material]
         if (list?.contains(player.uniqueId) == true) return
@@ -108,7 +136,7 @@ object GameData {
         uniqueMaterials[material] = list
 
         player.points += points
-        player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+        player.ping()
         player.broadcastPointChangeMessage(
             points,
             Component.text("Item"),
@@ -127,7 +155,7 @@ object GameData {
         uniqueAnimals[entityType] = list
 
         player.points += points
-        player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+        player.ping()
         player.broadcastPointChangeMessage(
             points,
             Component.text("Entity"),
@@ -147,12 +175,12 @@ object GameData {
         uniqueAdvancements[advancement.key] = list
 
         player.points += points
-        player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+        player.ping()
         player.broadcastPointChangeMessage(points, Component.text("Advancement"), advancement.display?.title())
     }
 
     fun handleWin() {
-        if(!Timer.isRunning()) return
+        if (! Timer.isRunning()) return
 
         Timer.stop()
         val winner = playerPoints.entries.filter { Bukkit.getPlayer(it.key)?.isOnline == true }.maxByOrNull { it.value }
@@ -166,13 +194,24 @@ object GameData {
                     Duration.ofSeconds(5), Duration.ofMillis(250)
                 )
             }
-            Bukkit.broadcast(mini("<green>${winningPlayer.name} hat das Spiel mit <red>${winner!!.value} <green>Punkten gewonnen"))
+            Bukkit.broadcast(mini("<green>${winningPlayer.name} hat das Spiel mit <red>${winner !!.value} <green>Punkten gewonnen"))
         }
         Bukkit.broadcast(mini("<green>Das Spiel wurde beendet."))
 
         onlinePlayers.forEach {
+            it.activePotionEffects.forEach { potionEffect ->
+                it.removePotionEffect(potionEffect.type)
+            }
+            val placement = playerPoints.filter { points -> points.value > it.points }.count() + 1
+            it.sendMessage(
+                literalText("Dein Platz: $placement") {
+                    color = NamedTextColor.GREEN
+                }
+            )
             it.teleport(worlds[0].spawnLocation)
         }
+
+        winningPlayer?.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 9999, 1))
 
         task(
             true,
