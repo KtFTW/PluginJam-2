@@ -5,6 +5,7 @@ import net.axay.kspigot.event.listen
 import net.stckoverflw.pluginjam.game.GameData
 import net.stckoverflw.pluginjam.game.handleDeath
 import net.stckoverflw.pluginjam.game.points
+import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
 import net.stckoverflw.pluginjam.timer.Timer
 import net.stckoverflw.pluginjam.util.Constants
 import org.bukkit.Material
@@ -20,11 +21,17 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerExpChangeEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerLevelChangeEvent
 import kotlin.random.Random
 
 object GameListeners {
     fun register() {
+
+        listen<PlayerJoinEvent> {
+            GameScoreboard.updateTeams()
+        }
+
         listen<PlayerDeathEvent> {
             it.keepInventory = true
             it.itemsToKeep.minusAssign(

@@ -1,5 +1,6 @@
 package net.stckoverflw.pluginjam.util
 
+import net.axay.kspigot.extensions.bukkit.dispatchCommand
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.extensions.server
 import net.axay.kspigot.main.KSpigotMainInstance
@@ -29,7 +30,7 @@ object WorldUtil {
                     it.kick(Component.text("Die Welten werden zurückgesetzt!").color(NamedTextColor.RED))
                 }
 
-                server.setWhitelist(true)
+                server.consoleSender.dispatchCommand("restart")
 
                 return@task
             }

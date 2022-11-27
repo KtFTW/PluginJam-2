@@ -26,8 +26,8 @@ class StartCommand {
             Timer.start()
             GameListeners.register()
             server.worlds.firstOrNull { it.name == "world" }
-                ?.worldBorder?.size = max(min(Constants.WORLDBORDER_SIZE/5.0, (Constants.WORLDBORDER_SIZE/10.0)* onlinePlayers.size), Constants.WORLDBORDER_SIZE)
-            broadcast(Component.text("Das Spiel wurde gestartet!").color(NamedTextColor.GREEN))
+                ?.worldBorder?.size = Constants.WORLDBORDER_SIZE
+            broadcast(prefix.append(Component.text("Das Spiel wurde gestartet!").color(NamedTextColor.GREEN)))
         }
     }
 }

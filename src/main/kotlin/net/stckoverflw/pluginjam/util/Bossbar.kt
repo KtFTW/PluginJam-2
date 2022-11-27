@@ -1,9 +1,11 @@
 package net.stckoverflw.pluginjam.util
 
 import net.axay.kspigot.extensions.onlinePlayers
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.stckoverflw.pluginjam.game.playerPoints
+import org.bukkit.Bukkit
 import net.kyori.adventure.bossbar.BossBar as AdventureBossbar
 import java.util.UUID
 
@@ -18,6 +20,7 @@ object Bossbar {
         }
 
         bossBars.forEach {bossBarEntry ->
+            Bukkit.getPlayer(bossBarEntry.key)?.showBossBar(bossBarEntry.value)
             val points = playerPoints[bossBarEntry.key] ?: 0
             val placement = playerPoints.filter { it.value > points  }.count() + 1
             val progress = points.toFloat() / Constants.MAX_POINTS.toFloat()

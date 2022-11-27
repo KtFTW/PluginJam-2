@@ -21,13 +21,20 @@ object GameScoreboard {
     fun create() {
         scoreboard.getObjective("game")?.unregister()
         objective = scoreboard.getObjective("game")
-            ?: scoreboard.registerNewObjective("game", Criteria.DUMMY, Component.text("PLUGIN JAM").color(NamedTextColor.RED))
+            ?: scoreboard.registerNewObjective("game", Criteria.DUMMY, Component.text("ALLES ODER NICHTS").color(NamedTextColor.RED))
 
         objective.displaySlot = DisplaySlot.SIDEBAR
     }
 
     fun setScore(player: Player, score: Int) {
         objective.getScore(player).score = score
+        onlinePlayers.sortedByDescending { it.points }.forEachIndexed { index, it ->
+            scoreboard.getPlayerTeam(it)?.removePlayer(it)
+            getTeam(index + 1).addPlayer(it)
+        }
+    }
+
+    fun updateTeams() {
         onlinePlayers.sortedByDescending { it.points }.forEachIndexed { index, it ->
             scoreboard.getPlayerTeam(it)?.removePlayer(it)
             getTeam(index + 1).addPlayer(it)
