@@ -10,6 +10,8 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import kotlin.math.absoluteValue
 
+val prefix = mini("<grey>[<yellow>AllesOderNichts<grey>] ")
+
 fun mini(string: String) = MiniMessage.miniMessage().deserialize(string)
 fun text(string: String) = Component.text(string)
 fun text(string: String, color: TextColor) = Component.text(string, color)

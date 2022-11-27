@@ -5,16 +5,26 @@ import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
 import net.stckoverflw.pluginjam.timer.Timer
 import net.stckoverflw.pluginjam.util.Constants
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.prefix
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
 object LobbyListeners {
 
     fun register() {
+        listen<PlayerJoinEvent> {
+            it.joinMessage(prefix.append(mini("<aqua>${it.player.name} <green>hat das Spiel betreten.")))
+        }
+
+        listen<PlayerQuitEvent> {
+            it.quitMessage(prefix.append(mini("<aqua>${it.player.name} <red>hat das Spiel verlassen.")))
+        }
+
         listen<EntityDamageEvent>(EventPriority.LOW) {
             it.isCancelled = !Timer.isRunning()
         }

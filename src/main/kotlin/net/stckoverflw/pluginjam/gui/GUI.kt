@@ -30,6 +30,25 @@ fun armorGui(): GUI<*> {
     return kSpigotGUI(GUIType.FOUR_BY_NINE) {
         page(1) {
             /*
+            * Food
+            * */
+            button(
+                Slots.RowFourSlotOne,
+                itemStack(Material.COOKIE) {
+                    meta {
+                        displayName(mini("<red>Cookie"))
+
+                        setLore {
+                            +mini("<green>Kaufe dieses Item durch einen Klick.")
+                            +mini("<gold>Preis: <bold>1 Punkte")
+                        }
+                    }
+                }
+            ) {
+                it.player.sell(it.bukkitEvent.currentItem?.type, 1)
+            }
+
+            /*
             * Leather
             * */
             button(

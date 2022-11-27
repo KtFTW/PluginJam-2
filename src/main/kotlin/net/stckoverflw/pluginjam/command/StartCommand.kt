@@ -10,6 +10,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.stckoverflw.pluginjam.listeners.GameListeners
 import net.stckoverflw.pluginjam.timer.Timer
 import net.stckoverflw.pluginjam.util.Constants
+import net.stckoverflw.pluginjam.util.prefix
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

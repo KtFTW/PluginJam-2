@@ -27,7 +27,7 @@ object WorldUtil {
                 Config.reset = true
 
                 onlinePlayers.forEach {
-                    it.kick(Component.text("Die Welten werden zurückgesetzt!").color(NamedTextColor.RED))
+                    it.kick(prefix.append(Component.text("Die Welten werden zurückgesetzt!").color(NamedTextColor.RED)))
                 }
 
                 server.consoleSender.dispatchCommand("restart")
@@ -35,7 +35,7 @@ object WorldUtil {
                 return@task
             }
 
-            Bukkit.broadcast(mini("<red>Der Server wird in $seconds Sekunden neugestartet!"))
+            Bukkit.broadcast(prefix.append(mini("<red>Der Server wird in $seconds Sekunden neugestartet!")))
 
             seconds --
         }

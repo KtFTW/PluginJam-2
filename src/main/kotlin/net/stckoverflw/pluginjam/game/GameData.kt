@@ -14,6 +14,7 @@ import net.stckoverflw.pluginjam.util.Constants
 import net.stckoverflw.pluginjam.util.WorldUtil
 import net.stckoverflw.pluginjam.util.broadcastPointChangeMessage
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.prefix
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -192,9 +193,9 @@ object GameData {
                     Duration.ofSeconds(5), Duration.ofMillis(250)
                 )
             }
-            Bukkit.broadcast(mini("<green>${winningPlayer.name} hat das Spiel mit <red>${winner !!.value} <green>Punkten gewonnen"))
+            Bukkit.broadcast(prefix.append(mini("<green>${winningPlayer.name} hat das Spiel mit <red>${winner !!.value} <green>Punkten gewonnen")))
         }
-        Bukkit.broadcast(mini("<green>Das Spiel wurde beendet."))
+        Bukkit.broadcast(prefix.append(mini("<green>Das Spiel wurde beendet.")))
 
         onlinePlayers.forEach {
             it.activePotionEffects.forEach { potionEffect ->
