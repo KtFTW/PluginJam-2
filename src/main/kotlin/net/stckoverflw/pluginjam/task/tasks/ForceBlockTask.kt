@@ -10,6 +10,10 @@ import org.bukkit.block.BlockFace
 
 class ForceBlockTask(private val block: Material)
     : Task(text("Stehe auf ").append(Component.translatable(block.translationKey()))) {
+
+    companion object {
+        val BLOCKS = listOf(Material.DEEPSLATE, Material.POINTED_DRIPSTONE)
+    }
     override fun register() {
         addTask(task(sync = true, delay = 0, 10) {
             val player = gamePlayers.firstOrNull { it.location.block.getRelative(BlockFace.DOWN).type == block}

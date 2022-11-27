@@ -13,9 +13,9 @@ import kotlin.random.nextInt
 object TaskManager {
     private val tasks = mutableListOf<Task>()
     operator fun invoke() {
-        tasks.add(ReachHeightTask(Random.nextInt(180..320)))
+        tasks.add(ReachHeightTask(Random.nextInt(140..250)))
         tasks.add(FindItemTask(FindItemTask.ITEMS.random()))
-        tasks.add(ForceBlockTask(FindItemTask.ITEMS.random()))
+        tasks.add(ForceBlockTask(ForceBlockTask.BLOCKS.random()))
     }
 
     fun makeComponent(player: Player): Component {

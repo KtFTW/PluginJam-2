@@ -6,9 +6,10 @@ object Constants {
 
     val ARMOR_KEY = pluginKey("armor")
 
-    const val WORLDBORDER_SIZE = 500.0
+    const val WORLDBORDER_SIZE = 300.0
+    const val TIME = 720
 
-    const val MAX_POINTS = 1250
+    const val MAX_POINTS = 750
     const val MILESTONE_BROADCAST_PERCENTAGE = 0.1
 
     const val POINTS_PER_MATERIAL = 5

@@ -11,6 +11,7 @@ import net.stckoverflw.pluginjam.config.Config
 import net.stckoverflw.pluginjam.game.handleDeath
 import net.stckoverflw.pluginjam.listeners.LobbyListeners
 import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
+import net.stckoverflw.pluginjam.task.TaskManager
 import net.stckoverflw.pluginjam.timer.Timer
 import net.stckoverflw.pluginjam.util.WorldUtil
 import org.bukkit.Bukkit
@@ -28,6 +29,7 @@ class PluginJamTwoPlugin : KSpigot() {
 
     override fun startup() {
         Timer.invoke()
+        TaskManager.invoke()
         ResetCommand()
         ShopCommand()
         StartCommand()
@@ -37,5 +39,9 @@ class PluginJamTwoPlugin : KSpigot() {
             GameScoreboard.create()
             Bukkit.getWorld("world") !!.worldBorder.size = 30.0
         }
+    }
+
+    override fun shutdown() {
+        Config.reset = true
     }
 }

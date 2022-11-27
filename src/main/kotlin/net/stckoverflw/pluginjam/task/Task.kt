@@ -20,6 +20,11 @@ abstract class Task(private val name: Component) : ListenerHolder, TaskHolder {
     override val tasks: MutableList<KSpigotRunnable> = mutableListOf()
     private val finished = mutableListOf<UUID>()
     abstract fun register()
+
+    init {
+        register()
+    }
+
     fun unregister() {
         unregisterAllListeners()
         removeAllTasks()
@@ -30,6 +35,7 @@ abstract class Task(private val name: Component) : ListenerHolder, TaskHolder {
         val points = GameData.getRewardPoints(finished.size, Constants.POINTS_PER_TASK, Constants.TASK_POINTS_STEP)
         if (points == 1) return
         player.points += points
+        finished.add(player.uniqueId)
         player.broadcastPointChangeMessage(points, Component.text("Aufgabe"), name)
     }
 

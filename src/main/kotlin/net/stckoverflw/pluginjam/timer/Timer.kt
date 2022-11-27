@@ -6,7 +6,11 @@ import net.axay.kspigot.runnables.task
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.stckoverflw.pluginjam.game.GameData
+import net.stckoverflw.pluginjam.task.TaskManager
+import net.stckoverflw.pluginjam.util.Bossbar
+import net.stckoverflw.pluginjam.util.Constants
 import net.stckoverflw.pluginjam.util.mini
+import java.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 object Timer {
@@ -29,14 +33,15 @@ object Timer {
                 time++
             }
 
-            if(time >= 600) {
+            if(time >= Constants.TIME) {
                 task(sync = true) {
                     GameData.handleWin()
                 }
-                broadcastTimer(mini("<red><bold>Das Spiel ist beendet."))
+                broadcast(mini("<red><bold>Das Spiel ist beendet."))
                 return@task
+            }else {
+                broadcast(formatTime())
             }
-            broadcastTimer(formatTime())
         }
     }
 
@@ -48,26 +53,23 @@ object Timer {
 
     fun stop() {
         running = false
+        broadcast(mini("<red><bold>Das Spiel ist beendet."))
     }
 
     fun reset() {
         time = 0
     }
 
-    private fun broadcastTimer(component: Component) {
+    private fun broadcast(time: Component) {
+        if (!isRunning()) return
+        Bossbar.tick(time)
         onlinePlayers.forEach {
-            it.sendActionBar(
-                literalText {
-                    component(component)
-                    color = this@Timer.color
-                    bold = true
-                }
-            )
+            it.sendActionBar(TaskManager.makeComponent(it))
         }
     }
 
     private fun formatTime(): Component {
-        time.seconds.toComponents { days, hours, minutes, seconds, _ ->
+        (Constants.TIME - time).seconds.toComponents { days, hours, minutes, seconds, _ ->
             return literalText {
                 if (days > 0) {
                     text("${days}d ")

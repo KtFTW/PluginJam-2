@@ -3,6 +3,8 @@ package net.stckoverflw.pluginjam.listeners
 import net.axay.kspigot.event.listen
 import net.stckoverflw.pluginjam.scoreboard.GameScoreboard
 import net.stckoverflw.pluginjam.timer.Timer
+import net.stckoverflw.pluginjam.util.Constants
+import net.stckoverflw.pluginjam.util.mini
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
@@ -35,6 +37,17 @@ object LobbyListeners {
             it.player.inventory.clear()
             it.player.health = 20.0
             it.player.foodLevel = 20
+        }
+
+        listen<PlayerJoinEvent> {
+            it.player.sendMessage(mini("<green>Willkommen zu unserem Plugin-Jam Spiel. In <red>12</red> Minuten ist es deine Aufgabe am <red>meisten Punkte</red> wie möglich zu sammeln." +
+                " Die Person, die nach Ablauf der Zeit am meisten Punkte hat oder am schnellsten <red>${Constants.MAX_POINTS}</red> Punkte erreicht, gewinnt. " +
+                "Punkte kannst du bekommen, indem du Items aufsammelst oder craftest, Entities tötest, Advancements bekommst, " +
+                "Aufgaben (stehen in der Action-Bar) erledigts oder Spieler tötest. <red>Aber pass auf</red>: Wenn du stirbst, " +
+                "verlierst du <red>die Hälfte</red> deiner Punkte. Außerdem wird es mit mehr Punkten immer schwieriger: " +
+                "Du kriegst mehr Schaden, bekommst schlimme Effekte und stirbst schneller. " +
+                "Du kannst dagegen vorgehen, indem du dir Rüstung aus dem Shop (/shop) kaufst. " +
+                "Wenn alle bereit sind, kann ein Admin das Spiel mit /start starten. Viel Glück!"))
         }
     }
 }

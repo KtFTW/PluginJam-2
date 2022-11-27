@@ -37,8 +37,7 @@ var Player.points: Int
         playerPoints[uniqueId] = value
         GameScoreboard.setScore(this, value)
 
-        if(points >= Constants.MAX_POINTS) {
-            addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 99999, 1))
+        if (points >= Constants.MAX_POINTS) {
             GameData.handleWin()
         } else {
             val milestone = Constants.MAX_POINTS * Constants.MILESTONE_BROADCAST_PERCENTAGE
@@ -91,7 +90,10 @@ fun Player.handleDeath() {
 private val uniqueMaterials = hashMapOf<Material, ArrayList<UUID>>()
 private val uniqueAnimals = hashMapOf<EntityType, ArrayList<UUID>>()
 private val uniqueAdvancements = hashMapOf<NamespacedKey, ArrayList<UUID>>()
-private val playerPoints = hashMapOf<UUID, Int>()
+private val uniqueLevels = hashMapOf<Int, ArrayList<UUID>>()
+val playerPoints = hashMapOf<UUID, Int>()
+
+fun Player.ping() = playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
 
 object GameData {
 
@@ -153,7 +155,7 @@ object GameData {
         if(!Timer.isRunning()) return
 
         Timer.stop()
-        val winner = playerPoints.entries.maxByOrNull { it.value }
+        val winner = playerPoints.entries.filter { Bukkit.getPlayer(it.key)?.isOnline == true }.maxByOrNull { it.value }
         val winningPlayer = if (winner != null) Bukkit.getPlayer(winner.key) else null
 
         if (winningPlayer != null) {
