@@ -1,6 +1,5 @@
 package net.stckoverflw.pluginjam.game
 
-import com.mojang.datafixers.kinds.Const
 import net.axay.kspigot.chat.literalText
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.title
@@ -30,23 +29,20 @@ import java.util.UUID
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-
 val gamePlayers: List<Player>
     get() = onlinePlayers.filter { it.gameMode == GameMode.SURVIVAL }
 
 var Player.points: Int
     get() = playerPoints[uniqueId] ?: 0
     set(value) {
-        playerPoints[uniqueId] = value
-        GameScoreboard.setScore(this, value)
-
         if (points >= Constants.MAX_POINTS) {
             GameData.handleWin()
         } else {
-            val milestone = Constants.MAX_POINTS * Constants.MILESTONE_BROADCAST_PERCENTAGE
-            if (value % milestone > points % milestone) {
-                broadcast("$name ist bei [${location.blockX}, ${location.blockY}, ${location.blockZ}]")
-            }
+            //Funktioniert nicht und keine Zeit
+  /*          val milestone = Constants.MAX_POINTS * Constants.MILESTONE_BROADCAST_PERCENTAGE
+            if ((value % milestone).roundToInt() > (points % milestone).roundToInt()) {
+                broadcast(prefix.append(mini("<aqua>$name <green>ist bei <grey>[<yellow>${location.blockX}, ${location.blockY}, ${location.blockZ}<grey>]")))
+            }*/
             removePotionEffect(PotionEffectType.GLOWING)
             removePotionEffect(PotionEffectType.SLOW_DIGGING)
             if (value >= Constants.MAX_POINTS * 0.25) {
@@ -71,6 +67,8 @@ var Player.points: Int
                 }
             }
         }
+        playerPoints[uniqueId] = value
+        GameScoreboard.setScore(this, value)
     }
 
 fun Player.handleDeath() {

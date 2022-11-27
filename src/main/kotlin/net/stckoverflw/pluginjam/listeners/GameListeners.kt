@@ -34,12 +34,12 @@ object GameListeners {
 
         listen<PlayerDeathEvent> {
             it.keepInventory = true
+            it.drops.clear()
             it.itemsToKeep.minusAssign(
                 it.itemsToKeep
                     .filter { item -> ! MaterialTags.ARMOR.isTagged(item.type) }
                     .filter { _ -> Random.nextInt(Constants.MAX_POINTS * 2) < it.entity.points }.toSet()
             )
-
             it.entity.handleDeath()
         }
 
