@@ -184,7 +184,7 @@ object GameData {
         WorldUtil.initializeReset()
     }
 
-    private fun getRewardPoints(step: Int, basePoints: Int, stepPoints: Int): Int {
+    fun getRewardPoints(step: Int, basePoints: Int, stepPoints: Int): Int {
         val points = basePoints - (step * stepPoints)
         return if (points <= 0) 1 else points
     }

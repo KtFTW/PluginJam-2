@@ -17,7 +17,7 @@ class FindItemTask(private val materialToFind: Material)
     : Task(text("Finde ").append(Component.translatable(materialToFind.translationKey()))) {
 
     companion object {
-        val ITEMS = listOf<Material>(Material.IRON_INGOT,)
+        val ITEMS = listOf(Material.IRON_INGOT, Material.ENDER_PEARL, Material.CAKE)
     }
     override fun register() {
 
